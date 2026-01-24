@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Montserrat } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 
-
-const montserrat = Montserrat({
+const inter = Inter({
   subsets: ["latin"],
+  weight: ["400", "500", "700"]
 });
 
 export const metadata: Metadata = {
@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" suppressHydrationWarning>
       <body
-        className={`${montserrat.className} w-full min-h-dvh antialiased`}
+        className={`${inter.className} w-full min-h-dvh antialiased`}
         cz-shortcut-listen="true"
       >
         <ThemeProvider
@@ -32,7 +32,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
-          <Toaster position="top-right" />
+          <Toaster position="bottom-right" />
         </ThemeProvider>
       </body>
     </html>

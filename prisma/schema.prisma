@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id            String    @id
+  id            String    @id @default(uuid())
   name          String
   email         String
   emailVerified Boolean   @default(false)
@@ -17,13 +17,14 @@ model User {
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
+  bookings      Booking[]
 
   @@unique([email])
-  @@map("user")
+  @@map("users")
 }
 
 model Session {
-  id        String   @id
+  id        String   @id @default(uuid())
   expiresAt DateTime
   token     String
   createdAt DateTime @default(now())
@@ -35,11 +36,11 @@ model Session {
 
   @@unique([token])
   @@index([userId])
-  @@map("session")
+  @@map("sessions")
 }
 
 model Account {
-  id                    String    @id
+  id                    String    @id @default(uuid())
   accountId             String
   providerId            String
   userId                String
@@ -55,11 +56,11 @@ model Account {
   updatedAt             DateTime  @updatedAt
 
   @@index([userId])
-  @@map("account")
+  @@map("accounts")
 }
 
 model Verification {
-  id         String   @id
+  id         String   @id @default(uuid())
   identifier String
   value      String
   expiresAt  DateTime
@@ -67,5 +68,47 @@ model Verification {
   updatedAt  DateTime @updatedAt
 
   @@index([identifier])
-  @@map("verification")
+  @@map("verifications")
+}
+
+model Barbershop {
+  id          String              @id @default(uuid())
+  name        String
+  address     String
+  phones      String[]
+  description String
+  imageUrl    String
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+  services    BarbershopService[]
+
+  @@map("barbershops")
+}
+
+model BarbershopService {
+  id           String     @id @default(uuid())
+  name         String
+  description  String
+  imageUrl     String
+  price        Decimal    @db.Decimal(10, 2)
+  barbershopId String
+  barbershop   Barbershop @relation(fields: [barbershopId], references: [id], onDelete: Cascade)
+  bookings     Booking[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@map("barbershopservices")
+}
+
+model Booking {
+  id        String            @id @default(uuid())
+  userId    String
+  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  serviceId String
+  service   BarbershopService @relation(fields: [serviceId], references: [id])
+  date      DateTime
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+
+  @@map("bookings")
 }

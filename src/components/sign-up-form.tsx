@@ -100,7 +100,7 @@ export default function SignUp() {
         onError: (ctx) => {
           toast.error(
             ctx.error.message === "User already exists. Use another email." &&
-              "Email já cadastrado!"
+            "Email já cadastrado!"
           );
           setLoading(false);
         },

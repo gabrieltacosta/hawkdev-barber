@@ -3,7 +3,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 
-import Header from "./components/header";
+import Header from "@/components/Header";
 
 export default async function RootLayout({
   children,
@@ -21,8 +21,8 @@ export default async function RootLayout({
   return (
     <>
       <Header />
-      <div className="container mx-auto p-6">
-      {children}
+      <div className="container mx-auto p-5">
+        {children}
       </div>
     </>
   );
