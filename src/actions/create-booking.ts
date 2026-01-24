@@ -19,7 +19,7 @@ export const createBooking = async (params: CreateBookingParams) => {
     throw new Error("Usuário não autenticado")
   }
   await prisma.booking.create({
-    data: { ...params, userId: (user.user as any).id },
+    data: { ...params, userId: (user.user).id },
   })
   revalidatePath("/barbershops/[id]")
   revalidatePath("/bookings")

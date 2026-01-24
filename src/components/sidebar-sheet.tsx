@@ -6,12 +6,12 @@ import { SheetClose, SheetContent, SheetHeader, SheetTitle } from "./ui/sheet"
 import { quickSearchOptions } from "@/constants/search"
 import Link from "next/link"
 import Image from "next/image"
-import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog"
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "./ui/dialog"
 import { signOut, useSession } from "@/lib/auth-client"
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
-import SignInDialog from "./sign-in-dialog"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
+import SignIn from "./sign-in-form"
 
 const SidebarSheet = () => {
     const { data } = useSession()
@@ -31,7 +31,7 @@ const SidebarSheet = () => {
                 <SheetTitle className="text-left">Menu</SheetTitle>
             </SheetHeader>
 
-            <div className="flex items-center justify-between gap-3 border-b border-solid py-5">
+            <div className="flex items-center justify-between gap-3 border-b border-solid p-5">
                 {data?.user ? (
                     <div className="flex items-center gap-2">
                         <Avatar>
@@ -54,7 +54,8 @@ const SidebarSheet = () => {
                                 </Button>
                             </DialogTrigger>
                             <DialogContent className="w-[90%]">
-                                <SignInDialog />
+                                <DialogTitle>Faça login na plataforma</DialogTitle>
+                                <SignIn />
                             </DialogContent>
                         </Dialog>
                     </>

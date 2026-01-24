@@ -2,17 +2,26 @@ import { MenuIcon } from "lucide-react"
 import { Button } from "./ui/button"
 import { Card, CardContent } from "./ui/card"
 import Image from "next/image"
-// import SignOutButton from "./sign-out-button"
+import Link from "next/link"
+import { Sheet, SheetTrigger } from "./ui/sheet"
+import SidebarSheet from "./sidebar-sheet"
 
 const Header = () => {
     return (
-        <Card className="rounded-none">
-            <CardContent className="flex justify-between items-center p-5">
-                <Image src="/logo.svg" alt="FSW Barber" height={18} width={120} />
-                <Button size="icon" variant="outline" >
-                    <MenuIcon />
-                </Button>
-                {/* <SignOutButton /> */}
+        <Card>
+            <CardContent className="flex flex-row items-center justify-between p-5">
+                <Link href="/">
+                    <Image alt="FSW Barber" src="/logo.svg" height={18} width={120} />
+                </Link>
+
+                <Sheet>
+                    <SheetTrigger asChild>
+                        <Button size="icon" variant="outline">
+                            <MenuIcon />
+                        </Button>
+                    </SheetTrigger>
+                    <SidebarSheet />
+                </Sheet>
             </CardContent>
         </Card>
     )

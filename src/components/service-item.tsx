@@ -14,15 +14,15 @@ import {
 import { Calendar } from "./ui/calendar"
 import { ptBR } from "date-fns/locale"
 import { useEffect, useMemo, useState } from "react"
-import { isPast, isToday, set } from "date-fns"
+import { addHours, isToday, set, startOfToday } from "date-fns"
 import { createBooking } from "../actions/create-booking"
 import { useSession } from "@/lib/auth-client"
 import { toast } from "sonner"
 import { getBookings } from "@/actions/get-bookings"
-import { Dialog, DialogContent } from "./ui/dialog"
-import SignInDialog from "./sign-in-dialog"
+import { Dialog, DialogContent, DialogTitle } from "./ui/dialog"
 import BookingSummary from "./booking-summary"
 import { useRouter } from "next/navigation"
+import SignIn from "./sign-in-form"
 
 interface ServiceItemProps {
     service: BarbershopService
@@ -59,20 +59,31 @@ interface GetTimeListProps {
 }
 
 const getTimeList = ({ bookings, selectedDay }: GetTimeListProps) => {
+    const now = new Date()
+    const thresholdTime = addHours(now, 1)
     return TIME_LIST.filter((time) => {
         const hour = Number(time.split(":")[0])
         const minutes = Number(time.split(":")[1])
 
-        const timeIsOnThePast = isPast(set(new Date(), { hours: hour, minutes }))
-        if (timeIsOnThePast && isToday(selectedDay)) {
+        const timeToCompare = set(selectedDay, {
+            hours: hour,
+            minutes: minutes,
+            seconds: 0,
+            milliseconds: 0
+        })
+
+        if (isToday(selectedDay) && timeToCompare < thresholdTime) {
             return false
         }
 
-        const hasBookingOnCurrentTime = bookings.some(
-            (booking) =>
-                booking.date.getHours() === hour &&
-                booking.date.getMinutes() === minutes,
-        )
+        const hasBookingOnCurrentTime = bookings.some((booking) => {
+            const bookingDate = new Date(booking.date)
+            return (
+                bookingDate.getHours() === hour &&
+                bookingDate.getMinutes() === minutes
+            )
+        })
+
         if (hasBookingOnCurrentTime) {
             return false
         }
@@ -94,6 +105,7 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
     useEffect(() => {
         const fetch = async () => {
             if (!selectedDay) return
+            // Opcional: setDayBookings([]) -> limpa horários antigos enquanto carrega
             const bookings = await getBookings({
                 date: selectedDay,
                 serviceId: service.id,
@@ -204,13 +216,13 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
                                         <SheetTitle>Fazer Reserva</SheetTitle>
                                     </SheetHeader>
 
-                                    <div className="border-b border-solid py-5">
+                                    <div className="flex items-center flex-col border-b border-solid py-5">
                                         <Calendar
                                             mode="single"
                                             locale={ptBR}
                                             selected={selectedDay}
                                             onSelect={handleDateSelect}
-                                            fromDate={new Date()}
+                                            disabled={{ before: startOfToday() }}
                                             styles={{
                                                 head_cell: {
                                                     width: "100%",
@@ -289,7 +301,8 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
                 onOpenChange={(open) => setSignInDialogIsOpen(open)}
             >
                 <DialogContent className="w-[90%]">
-                    <SignInDialog />
+                    <DialogTitle>Faça login na plataforma</DialogTitle>
+                    <SignIn />
                 </DialogContent>
             </Dialog>
         </>
