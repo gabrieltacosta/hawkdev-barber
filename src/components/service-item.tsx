@@ -149,6 +149,7 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
         try {
             if (!selectedDate) return
             await createBooking({
+                userId: data?.user.id as string,
                 serviceId: service.id,
                 date: selectedDate,
             })

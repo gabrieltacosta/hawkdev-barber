@@ -12,6 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 import SignIn from "./sign-in-form"
+import { ModeToggle } from "./mode-toggle-theme"
 
 const SidebarSheet = () => {
     const { data } = useSession()
@@ -33,15 +34,19 @@ const SidebarSheet = () => {
 
             <div className="flex items-center justify-between gap-3 border-b border-solid p-5">
                 {data?.user ? (
-                    <div className="flex items-center gap-2">
-                        <Avatar>
-                            <AvatarImage src={data?.user?.image ?? ""} />
-                            <AvatarFallback>{data.user.name.split(" ").map((n) => n[0]).join("")}</AvatarFallback>
-                        </Avatar>
-
+                    <div className="flex w-full items-center justify-between gap-2">
+                        <div className="flex gap-2 items-center">
+                            <Avatar>
+                                <AvatarImage src={data?.user?.image ?? ""} />
+                                <AvatarFallback>{data.user.name.split(" ").map((n) => n[0]).join("")}</AvatarFallback>
+                            </Avatar>
+                            <div>
+                                <p className="font-bold">{data.user.name}</p>
+                                <p className="text-xs">{data.user.email}</p>
+                            </div>
+                        </div>
                         <div>
-                            <p className="font-bold">{data.user.name}</p>
-                            <p className="text-xs">{data.user.email}</p>
+                            <ModeToggle />
                         </div>
                     </div>
                 ) : (
@@ -58,6 +63,7 @@ const SidebarSheet = () => {
                                 <SignIn />
                             </DialogContent>
                         </Dialog>
+                        <ModeToggle />
                     </>
                 )}
             </div>

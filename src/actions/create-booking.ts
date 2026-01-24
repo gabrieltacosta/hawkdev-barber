@@ -7,19 +7,20 @@ import { headers } from "next/headers"
 
 
 interface CreateBookingParams {
+  userId: string,
   serviceId: string
   date: Date
 }
 
 export const createBooking = async (params: CreateBookingParams) => {
-  const user = await auth.api.getSession({
+  const session = await auth.api.getSession({
     headers: await headers()
   })
-  if (!user) {
+  if (!session || session.user.id !== params.userId) {
     throw new Error("Usuário não autenticado")
   }
   await prisma.booking.create({
-    data: { ...params, userId: (user.user).id },
+    data: { ...params, userId: (session.user).id },
   })
   revalidatePath("/barbershops/[id]")
   revalidatePath("/bookings")

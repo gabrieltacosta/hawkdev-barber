@@ -13,8 +13,8 @@ export const getConfirmedBookings = async () => {
   }
   return prisma.booking.findMany({
     where: {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      userId: (session.user as any).id,
+      
+      userId: (session.user).id,
       date: {
         gte: new Date(),
       },

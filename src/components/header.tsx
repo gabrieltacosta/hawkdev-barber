@@ -8,7 +8,7 @@ import SidebarSheet from "./sidebar-sheet"
 
 const Header = () => {
     return (
-        <Card>
+        <Card className="rounded-none">
             <CardContent className="flex flex-row items-center justify-between p-5">
                 <Link href="/">
                     <Image alt="FSW Barber" src="/logo.svg" height={18} width={120} />
