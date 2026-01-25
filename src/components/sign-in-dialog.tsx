@@ -3,13 +3,15 @@ import { Button } from "./ui/button"
 import { DialogDescription, DialogHeader, DialogTitle } from "./ui/dialog"
 import Image from "next/image"
 import { toast } from "sonner"
+import { usePathname } from "next/navigation"
 
 const SignInDialog = () => {
+    const pathname = usePathname()
     const handleSignInWithGoogle = async () => {
         await signIn.social(
             {
                 provider: "google",
-                callbackURL: "/dashboard",
+                callbackURL: pathname,
             },
             {
                 onRequest: () => {
