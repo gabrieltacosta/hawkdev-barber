@@ -26,6 +26,8 @@ const SidebarSheet = () => {
         }
     })
 
+    console.log(data?.user.image)
+
     return (
         <SheetContent className="overflow-y-auto">
             <SheetHeader>
@@ -37,7 +39,7 @@ const SidebarSheet = () => {
                     <div className="flex w-full items-center justify-between gap-2">
                         <div className="flex gap-2 items-center">
                             <Avatar>
-                                <AvatarImage src={data?.user?.image ?? ""} />
+                                <AvatarImage src={data.user.image as string} />
                                 <AvatarFallback>{data.user.name.split(" ").map((n) => n[0]).join("")}</AvatarFallback>
                             </Avatar>
                             <div>
